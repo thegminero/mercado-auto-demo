@@ -921,10 +921,14 @@
   border-radius: 4px;
   padding: 0.5rem;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #2d3748;
   display: block;
-  overflow-x: auto;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .event-item strong {
@@ -954,11 +958,15 @@
   background: transparent;
   border: none;
   padding: 0;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #2d3748;
   line-height: 1.4;
   white-space: pre-wrap;
-  overflow-x: auto;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* Feature subsections */

@@ -332,6 +332,8 @@ const Navbar: React.FC = () => {
             params: {
               hitsPerPage: 4,
               attributesToRetrieve: ['objectID', 'ecomDescription', 'marca', 'imageUrl', 'catecom', 'storeDetail'],
+              ruleContexts: ['autocomplete'],
+              analyticsTags: ['autocomplete']
             }
           }
         ]);
@@ -381,6 +383,8 @@ const Navbar: React.FC = () => {
           params: {
             hitsPerPage: 4,
             attributesToRetrieve: ['objectID', 'ecomDescription', 'marca', 'imageUrl', 'catecom', 'storeDetail'],
+            ruleContexts: ['autocomplete'],
+            analyticsTags: ['autocomplete']
             // You can add filters here for popular products if you have that data
             // filters: 'isPopular:true OR isFeatured:true'
           }

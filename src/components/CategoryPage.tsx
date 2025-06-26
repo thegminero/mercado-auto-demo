@@ -889,7 +889,11 @@ THEN boost products where marca = "Bimbo"`}</code>
 {
   "objectID": "producto-123",
   "ecomDescription": "Pan Integral",
-  "categoryPageID": "abarrotes-horneado-y-complementos",
+  "categoryPageID": [
+    "Abarrotes",
+    "Abarrotes > Horneado Y Complementos", 
+    "Abarrotes > Horneado Y Complementos > Panes"
+  ],
   "categoria_nivel_1": "Abarrotes",
   "categoria_nivel_2": "Horneado Y Complementos",
   "categoria_nivel_3": "Panes"
@@ -908,26 +912,32 @@ const filter = \`raw_category_hierarchy:"\${titleCasePath.join(' > ')}"\`;
                       </div>
                     </div>
                     
-                    <div className="alternative-code">
-                      <h6><i className="fas fa-exchange-alt"></i> {algoliaLang === 'es' ? 'Alternativo (categoryPageID):' : algoliaLang === 'en' ? 'Alternative (categoryPageID):' : algoliaLang === 'fr' ? 'Alternatif (categoryPageID):' : 'Alternativo (categoryPageID):'}</h6>
-                      <div className="code-block">
-                        <code>{`// Filtro con categoryPageID
-const categorySlug = path.map(cat => cat.toLowerCase().replace(/\\s+/g, '-')).join('-');
-const filter = \`categoryPageID:"\${categorySlug}"\`;
-// ${algoliaLang === 'es' ? 'Resultado' : algoliaLang === 'en' ? 'Result' : algoliaLang === 'fr' ? 'Résultat' : 'Resultado'}: 'categoryPageID:"abarrotes-horneado-y-complementos"'`}</code>
+                                          <div className="alternative-code">
+                        <h6><i className="fas fa-exchange-alt"></i> {algoliaLang === 'es' ? 'Alternativo (categoryPageID):' : algoliaLang === 'en' ? 'Alternative (categoryPageID):' : algoliaLang === 'fr' ? 'Alternatif (categoryPageID):' : 'Alternativo (categoryPageID):'}</h6>
+                        <div className="code-block">
+                          <code>{`// Filtro con categoryPageID
+const titleCasePath = path.map(category => 
+  category.split(' ').map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  ).join(' ')
+);
+const fullPath = titleCasePath.join(' > ');
+const filter = \`categoryPageID:"\${fullPath}"\`;
+// ${algoliaLang === 'es' ? 'Resultado' : algoliaLang === 'en' ? 'Result' : algoliaLang === 'fr' ? 'Résultat' : 'Resultado'}: 
+// 'categoryPageID:"Abarrotes > Horneado Y Complementos"'`}</code>
+                        </div>
                       </div>
-                    </div>
                   </div>
                   
                   <h6><i className="fas fa-cogs"></i> {algoliaLang === 'es' ? 'Merchandising Studio con categoryPageID:' : algoliaLang === 'en' ? 'Merchandising Studio with categoryPageID:' : algoliaLang === 'fr' ? 'Merchandising Studio avec categoryPageID:' : 'Merchandising Studio com categoryPageID:'}</h6>
                   
                   <div className="code-block">
                     <code>{`// ${algoliaLang === 'es' ? 'Regla más simple en Merchandising Studio' : algoliaLang === 'en' ? 'Simpler rule in Merchandising Studio' : algoliaLang === 'fr' ? 'Règle plus simple dans Merchandising Studio' : 'Regra mais simples no Merchandising Studio'}
-IF categoryPageID = "abarrotes-horneado-y-complementos"
+IF categoryPageID = "Abarrotes > Horneado Y Complementos"
 THEN boost products where marca = "Bimbo"
 
 // ${algoliaLang === 'es' ? 'O usar wildcards para categorías padre' : algoliaLang === 'en' ? 'Or use wildcards for parent categories' : algoliaLang === 'fr' ? 'Ou utiliser des wildcards pour les catégories parentes' : 'Ou usar wildcards para categorias pai'}
-IF categoryPageID STARTS_WITH "abarrotes"
+IF categoryPageID = "Abarrotes"
 THEN boost products where isNewProduct = true`}</code>
                   </div>
                   
