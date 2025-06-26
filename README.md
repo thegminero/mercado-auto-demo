@@ -1,46 +1,169 @@
-# Getting Started with Create React App
+# Auto Mercado React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React application that replicates the look and feel of Auto Mercado's website with Algolia search integration.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Responsive Design**: Mobile-first approach with Bootstrap 4
+- **Algolia Search Integration**: Real-time search with filters and sorting
+- **Auto Mercado Branding**: Authentic styling matching the original website
+- **Product Catalog**: Display products with images, prices, and descriptions
+- **Category Navigation**: Browse products by categories
+- **Shopping Cart**: Add products to cart functionality
+- **Modern UI/UX**: Smooth animations and hover effects
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **React 19** with TypeScript
+- **Algolia InstantSearch** for search functionality
+- **Bootstrap 4** for responsive layout
+- **Font Awesome** for icons
+- **Custom CSS** with Auto Mercado branding
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Algolia Configuration
 
-### `npm test`
+The app is configured with your Algolia credentials:
+- **Application ID**: MWN8IH23ME
+- **Search API Key**: 4e648074863f9356162d9db95a19efe0
+- **Index Name**: automercado_test
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Project Structure
 
-### `npm run build`
+```
+src/
+├── components/
+│   ├── Navbar.tsx          # Navigation bar with search
+│   ├── Navbar.css          # Navbar styling
+│   ├── HomePage.tsx        # Homepage with hero and categories
+│   ├── HomePage.css        # Homepage styling
+│   ├── SearchPage.tsx      # Search results page
+│   └── SearchPage.css      # Search page styling
+├── App.tsx                 # Main app component
+├── App.css                 # Global styles
+└── index.tsx              # App entry point
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Getting Started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Prerequisites
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Node.js (version 14 or higher)
+- npm or yarn
 
-### `npm run eject`
+### Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd automercado-react
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Install dependencies:
+```bash
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+3. Start the development server:
+```bash
+npm start
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+The app will open at `http://localhost:3000`
 
-## Learn More
+### Building for Production
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm run build
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Components Overview
+
+### Navbar
+- Auto Mercado logo
+- Navigation menu
+- Search bar with Algolia integration
+- User authentication buttons
+- Shopping cart icon
+
+### HomePage
+- Hero section with search
+- Product categories grid
+- Featured products section
+- Services overview
+
+### SearchPage
+- Search results grid
+- Filters sidebar (categories, brands)
+- Sorting options
+- Pagination
+- Product cards with add to cart
+
+## Styling
+
+The app uses Auto Mercado's brand colors and typography:
+- **Primary Green**: #00a651
+- **Dark Green**: #008f47
+- **Gray Text**: #4f4f4f
+- **Font Family**: BryantPro (Bold, Semibold, Regular)
+
+## Algolia Search Features
+
+- **Real-time Search**: Instant results as you type
+- **Faceted Search**: Filter by categories and brands
+- **Sorting**: Sort by relevance, price, or name
+- **Pagination**: Navigate through search results
+- **Highlighting**: Search terms are highlighted in results
+
+## Responsive Design
+
+The app is fully responsive and works on:
+- Desktop (1200px+)
+- Tablet (768px - 1199px)
+- Mobile (up to 767px)
+
+## Customization
+
+### Adding New Categories
+Edit the `categories` array in `HomePage.tsx`:
+
+```typescript
+const categories = [
+  { name: 'New Category', icon: '🆕', color: '#your-color' },
+  // ... existing categories
+];
+```
+
+### Modifying Search Filters
+Update the `RefinementList` components in `SearchPage.tsx` to match your Algolia index attributes.
+
+### Styling Changes
+Modify the CSS files to adjust colors, fonts, or layout to match your brand requirements.
+
+## Deployment
+
+The app can be deployed to any static hosting service:
+
+1. Build the app: `npm run build`
+2. Upload the `build` folder to your hosting service
+
+Recommended hosting platforms:
+- Netlify
+- Vercel
+- AWS S3 + CloudFront
+- GitHub Pages
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
+
+## Support
+
+For support or questions, please contact the development team.

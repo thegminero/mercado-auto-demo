@@ -1,38 +1,221 @@
-.App {
-  text-align: center;
+/* Import Bootstrap and Font Awesome */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+/* Auto Mercado Custom Fonts */
+@font-face {
+  font-family: 'BryantPro';
+  font-style: normal;
+  src: local('BryantPro-Regular'), url('https://fonts.gstatic.com/s/bryantpro/v1/BryantPro-Regular.woff2') format('woff2');
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+@font-face {
+  font-family: 'BryantPro-Bold';
+  font-style: normal;
+  src: local('BryantPro-Bold'), url('https://fonts.gstatic.com/s/bryantpro/v1/BryantPro-Bold.woff2') format('woff2');
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@font-face {
+  font-family: 'BryantPro-Semibold';
+  font-style: normal;
+  src: local('BryantPro-Semibold'), url('https://fonts.gstatic.com/s/bryantpro/v1/BryantPro-Medium.woff2') format('woff2');
+}
+
+/* Root Variables */
+:root {
+  --blue: #007bff;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #28a745;
+  --teal: #20c997;
+  --cyan: #17a2b8;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --primary: #3e8acc;
+  --secondary: #6c757d;
+  --success: #00a651;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #F45F56;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Global Styles */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: sans-serif;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-color: #e4e5e6;
+}
+
+body, html {
+  background-color: #fff;
+  font-family: BryantPro-Semibold;
+  max-width: 100vw;
+  padding-right: 0 !important;
+}
+
+/* Auto Mercado Specific Styles */
+.gray-text,
+.gray-text:hover {
+  color: #4f4f4f;
+}
+
+.p-am {
+  font-family: BryantPro-Semibold;
+  font-size: 16px;
+  color: #4f4f4f;
+  margin: 0;
+}
+
+.h5-am {
+  font-family: BryantPro-Bold;
+  font-size: 23px;
+  color: #4f4f4f;
+  margin: 0;
+}
+
+@media (min-width: 992px) {
+  .h5-am {
+    font-size: 22px;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.regular-text {
+  font-size: 16px !important;
+}
+
+.medium-text {
+  font-size: 22px !important;
+}
+
+.bold {
+  font-family: BryantPro-Bold !important;
+}
+
+.med-small-text {
+  font-size: 18px !important;
+}
+
+.input-icon {
+  position: relative;
+}
+
+.input-icon input {
+  padding-left: 23px;
+}
+
+input[type=search] {
+  border-radius: 40px;
+}
+
+.shadow-in {
+  box-shadow: 0 8px 8px #2c3c2f0d;
+}
+
+.am-shadow {
+  box-shadow: 0 4px 8px #2c3c2f1a;
+}
+
+@media (min-width: 1220px) {
+  .am-shadow-lg-none {
+    box-shadow: none;
+  }
+}
+
+.green-text {
+  color: #00a651 !important;
+}
+
+@media (min-width: 1200px) {
+  .container,
+  .container-lg {
+    padding: 0 58px;
+  }
+}
+
+/* Button Styles */
+.am-button {
+  border-radius: 20px;
+  font-weight: 600;
+  padding: 8px 24px;
+  transition: all 0.2s ease;
+}
+
+.am-button.simple {
+  background-color: transparent;
+  border: 2px solid #00a651;
+  color: #00a651;
+}
+
+.am-button.simple:hover {
+  background-color: #00a651;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.am-button.solid {
+  background-color: #00a651;
+  border: 2px solid #00a651;
+  color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.am-button.solid:hover {
+  background-color: #008f47;
+  border-color: #008f47;
+}
+
+/* App Container */
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 991.98px) {
+  .navbar-expand-lg > .container {
+    padding-right: 0;
+    padding-left: 0;
   }
-  to {
-    transform: rotate(360deg);
+}
+
+@media (max-width: 1199.98px) {
+  .navbar-expand-xl > .container-lg {
+    padding-right: 0;
+    padding-left: 0;
   }
 }
