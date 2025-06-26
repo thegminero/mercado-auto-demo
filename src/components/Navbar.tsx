@@ -81,7 +81,25 @@ const Navbar: React.FC = () => {
       availability: '99.99% uptime garantizado',
       globalCDN: 'Servidores en todo el mundo',
       realTime: 'Actualizaciones instantáneas',
-      mobileOptimized: 'Experiencia perfecta en dispositivos móviles'
+      mobileOptimized: 'Experiencia perfecta en dispositivos móviles',
+      // New keys for event documentation
+      eventStructure: 'Estructura del Evento (API Oficial):',
+      officialAPI: 'Estructura oficial Algolia Insights API',
+      important: 'Importante:',
+      queryIDRequired: 'Se requiere queryID porque el click proviene de resultados de búsqueda de Algolia',
+      event: 'Evento:',
+      when: 'Cuándo:',
+      implementation: 'Implementación:',
+      multiIndexSystem: 'Multi-Index Autocomplete System',
+      recentSearches: 'Recent Searches (localStorage)',
+      storage: 'Almacenamiento:',
+      popularTerms: 'Popular Search Terms',
+      popularTermsDesc: 'Términos populares:',
+      functionality2: 'Funcionalidad:',
+      productSuggestions: 'Product Suggestions',
+      visualization: 'Visualización:',
+      limit: 'Límite:',
+      interaction: 'Interacción:'
     },
     en: {
       searchFeatures: 'Search Features',
@@ -106,7 +124,25 @@ const Navbar: React.FC = () => {
       availability: '99.99% uptime guaranteed',
       globalCDN: 'Servers worldwide',
       realTime: 'Instant updates',
-      mobileOptimized: 'Perfect experience on mobile devices'
+      mobileOptimized: 'Perfect experience on mobile devices',
+      // New keys for event documentation
+      eventStructure: 'Event Structure (Official API):',
+      officialAPI: 'Official Algolia Insights API structure',
+      important: 'Important:',
+      queryIDRequired: 'queryID is required because the click comes from Algolia search results',
+      event: 'Event:',
+      when: 'When:',
+      implementation: 'Implementation:',
+      multiIndexSystem: 'Multi-Index Autocomplete System',
+      recentSearches: 'Recent Searches (localStorage)',
+      storage: 'Storage:',
+      popularTerms: 'Popular Search Terms',
+      popularTermsDesc: 'Popular terms:',
+      functionality2: 'Functionality:',
+      productSuggestions: 'Product Suggestions',
+      visualization: 'Visualization:',
+      limit: 'Limit:',
+      interaction: 'Interaction:'
     },
     fr: {
       searchFeatures: 'Fonctionnalités de Recherche',
@@ -131,7 +167,25 @@ const Navbar: React.FC = () => {
       availability: '99,99% de disponibilité garantie',
       globalCDN: 'Serveurs dans le monde entier',
       realTime: 'Mises à jour instantanées',
-      mobileOptimized: 'Expérience parfaite sur appareils mobiles'
+      mobileOptimized: 'Expérience parfaite sur appareils mobiles',
+      // New keys for event documentation
+      eventStructure: 'Structure d\'Événement (API Officielle):',
+      officialAPI: 'Structure officielle de l\'API Algolia Insights',
+      important: 'Important:',
+      queryIDRequired: 'queryID est requis car le clic provient des résultats de recherche Algolia',
+      event: 'Événement:',
+      when: 'Quand:',
+      implementation: 'Implémentation:',
+      multiIndexSystem: 'Système Autocomplete Multi-Index',
+      recentSearches: 'Recherches Récentes (localStorage)',
+      storage: 'Stockage:',
+      popularTerms: 'Termes de Recherche Populaires',
+      popularTermsDesc: 'Termes populaires:',
+      functionality2: 'Fonctionnalité:',
+      productSuggestions: 'Suggestions de Produits',
+      visualization: 'Visualisation:',
+      limit: 'Limite:',
+      interaction: 'Interaction:'
     },
     pt: {
       searchFeatures: 'Recursos de Pesquisa',
@@ -156,7 +210,25 @@ const Navbar: React.FC = () => {
       availability: '99,99% de uptime garantido',
       globalCDN: 'Servidores em todo o mundo',
       realTime: 'Atualizações instantâneas',
-      mobileOptimized: 'Experiência perfeita em dispositivos móveis'
+      mobileOptimized: 'Experiência perfeita em dispositivos móveis',
+      // New keys for event documentation
+      eventStructure: 'Estrutura do Evento (API Oficial):',
+      officialAPI: 'Estrutura oficial da API Algolia Insights',
+      important: 'Importante:',
+      queryIDRequired: 'queryID é obrigatório porque o clique vem dos resultados de pesquisa do Algolia',
+      event: 'Evento:',
+      when: 'Quando:',
+      implementation: 'Implementação:',
+      multiIndexSystem: 'Sistema Autocomplete Multi-Índice',
+      recentSearches: 'Pesquisas Recentes (localStorage)',
+      storage: 'Armazenamento:',
+      popularTerms: 'Termos de Pesquisa Populares',
+      popularTermsDesc: 'Termos populares:',
+      functionality2: 'Funcionalidade:',
+      productSuggestions: 'Sugestões de Produtos',
+      visualization: 'Visualização:',
+      limit: 'Limite:',
+      interaction: 'Interação:'
     }
   };
 
@@ -830,8 +902,8 @@ const Navbar: React.FC = () => {
                 <h4><i className="fas fa-search"></i> {algoliaTranslations[algoliaLanguage].searchFeatures}</h4>
                 
                 <div className="feature-subsection">
-                  <h5><i className="fas fa-magic"></i> Multi-Index Autocomplete System</h5>
-                  <p><strong>Implementación:</strong> Navbar.tsx utiliza múltiples fuentes de datos para autocomplete:</p>
+                  <h5><i className="fas fa-magic"></i> {algoliaTranslations[algoliaLanguage].multiIndexSystem}</h5>
+                  <p><strong>{algoliaTranslations[algoliaLanguage].implementation}</strong> {algoliaLanguage === 'es' ? 'Navbar.tsx utiliza múltiples fuentes de datos para autocomplete:' : algoliaLanguage === 'en' ? 'Navbar.tsx uses multiple data sources for autocomplete:' : algoliaLanguage === 'fr' ? 'Navbar.tsx utilise plusieurs sources de données pour l\'autocomplétion:' : 'Navbar.tsx usa múltiplas fontes de dados para autocomplete:'}</p>
                   <div className="code-block">
                     <code>{`// Multi-index query para suggestions + productos
 const multiSearch = searchClient.multipleQueries([
@@ -851,8 +923,8 @@ const multiSearch = searchClient.multipleQueries([
 ]);`}</code>
                   </div>
                   
-                  <h5><i className="fas fa-clock"></i> Recent Searches (localStorage)</h5>
-                  <p><strong>Almacenamiento:</strong> Las búsquedas recientes se guardan localmente:</p>
+                  <h5><i className="fas fa-clock"></i> {algoliaTranslations[algoliaLanguage].recentSearches}</h5>
+                  <p><strong>{algoliaTranslations[algoliaLanguage].storage}</strong> {algoliaLanguage === 'es' ? 'Las búsquedas recientes se guardan localmente:' : algoliaLanguage === 'en' ? 'Recent searches are stored locally:' : algoliaLanguage === 'fr' ? 'Les recherches récentes sont stockées localement:' : 'As pesquisas recentes são armazenadas localmente:'}</p>
                   <div className="code-block">
                     <code>{`// Guardar búsqueda reciente
 const saveRecentSearch = (query) => {
@@ -862,14 +934,26 @@ const saveRecentSearch = (query) => {
 };`}</code>
                   </div>
 
-                  <h5><i className="fas fa-fire"></i> Popular Search Terms</h5>
-                  <p><strong>Términos populares:</strong> "Leche", "Pan", "Arroz", "Café", "Aceite" con íconos 🔥</p>
-                  <p><strong>Funcionalidad:</strong> Se muestran cuando el campo está vacío para inspirar búsquedas</p>
+                  <h5><i className="fas fa-fire"></i> {algoliaTranslations[algoliaLanguage].popularTerms}</h5>
+                  <p><strong>{algoliaTranslations[algoliaLanguage].popularTermsDesc}</strong> {algoliaLanguage === 'es' ? '"Leche", "Pan", "Arroz", "Café", "Aceite" con íconos 🔥' : algoliaLanguage === 'en' ? '"Milk", "Bread", "Rice", "Coffee", "Oil" with 🔥 icons' : algoliaLanguage === 'fr' ? '"Lait", "Pain", "Riz", "Café", "Huile" avec icônes 🔥' : '"Leite", "Pão", "Arroz", "Café", "Óleo" com ícones 🔥'}</p>
+                  <p><strong>{algoliaTranslations[algoliaLanguage].functionality2}</strong> {algoliaLanguage === 'es' ? 'Se muestran cuando el campo está vacío para inspirar búsquedas' : algoliaLanguage === 'en' ? 'Shown when field is empty to inspire searches' : algoliaLanguage === 'fr' ? 'Affichés quand le champ est vide pour inspirer les recherches' : 'Mostrados quando o campo está vazio para inspirar pesquisas'}</p>
 
-                  <h5><i className="fas fa-image"></i> Product Suggestions</h5>
-                  <p><strong>Visualización:</strong> Productos con imágenes 60x60px, nombre, marca y precio</p>
-                  <p><strong>Límite:</strong> Máximo 4 productos para mantener UI limpia</p>
-                  <p><strong>Interacción:</strong> Click navega a página de producto individual</p>
+                  <h5><i className="fas fa-image"></i> {algoliaTranslations[algoliaLanguage].productSuggestions}</h5>
+                  <p><strong>{algoliaTranslations[algoliaLanguage].visualization}</strong> {algoliaLanguage === 'es' ? 'Productos con imágenes 60x60px, nombre, marca y precio' : algoliaLanguage === 'en' ? 'Products with 60x60px images, name, brand and price' : algoliaLanguage === 'fr' ? 'Produits avec images 60x60px, nom, marque et prix' : 'Produtos com imagens 60x60px, nome, marca e preço'}</p>
+                  <p><strong>{algoliaTranslations[algoliaLanguage].limit}</strong> {algoliaLanguage === 'es' ? 'Máximo 4 productos para mantener UI limpia' : algoliaLanguage === 'en' ? 'Maximum 4 products to keep UI clean' : algoliaLanguage === 'fr' ? 'Maximum 4 produits pour garder l\'UI propre' : 'Máximo 4 produtos para manter UI limpa'}</p>
+                  <p><strong>{algoliaTranslations[algoliaLanguage].interaction}</strong> {algoliaLanguage === 'es' ? 'Click navega a página de producto individual' : algoliaLanguage === 'en' ? 'Click navigates to individual product page' : algoliaLanguage === 'fr' ? 'Clic navigue vers la page produit individuelle' : 'Clique navega para página individual do produto'}</p>
+                  
+                  <div className="recommendation-box">
+                    <h6><i className="fas fa-lightbulb"></i> {algoliaLanguage === 'es' ? 'Recomendación para Producción' : algoliaLanguage === 'en' ? 'Production Recommendation' : algoliaLanguage === 'fr' ? 'Recommandation pour la Production' : 'Recomendação para Produção'}</h6>
+                    <p><strong>{algoliaLanguage === 'es' ? 'Normalmente recomendamos usar la' : algoliaLanguage === 'en' ? 'We usually recommend using the' : algoliaLanguage === 'fr' ? 'Nous recommandons généralement d\'utiliser la' : 'Normalmente recomendamos usar a'}</strong> <a href="https://www.algolia.com/doc/ui-libraries/autocomplete/introduction/what-is-autocomplete/" target="_blank" rel="noopener noreferrer" className="algolia-link-inline">Algolia Autocomplete Library</a> {algoliaLanguage === 'es' ? 'con sus plugins especializados:' : algoliaLanguage === 'en' ? 'with its specialized plugins:' : algoliaLanguage === 'fr' ? 'avec ses plugins spécialisés:' : 'com seus plugins especializados:'}</p>
+                    <ul className="plugin-list">
+                      <li><strong>Query Suggestions Plugin:</strong> {algoliaLanguage === 'es' ? 'Sugerencias automáticas de búsqueda' : algoliaLanguage === 'en' ? 'Automatic search suggestions' : algoliaLanguage === 'fr' ? 'Suggestions de recherche automatiques' : 'Sugestões automáticas de pesquisa'}</li>
+                      <li><strong>Recent Searches Plugin:</strong> {algoliaLanguage === 'es' ? 'Historial de búsquedas recientes' : algoliaLanguage === 'en' ? 'Recent search history' : algoliaLanguage === 'fr' ? 'Historique des recherches récentes' : 'Histórico de pesquisas recentes'}</li>
+                      <li><strong>Products Plugin:</strong> {algoliaLanguage === 'es' ? 'Sugerencias de productos con imágenes' : algoliaLanguage === 'en' ? 'Product suggestions with images' : algoliaLanguage === 'fr' ? 'Suggestions de produits avec images' : 'Sugestões de produtos com imagens'}</li>
+                      <li><strong>Popular Searches Plugin:</strong> {algoliaLanguage === 'es' ? 'Términos de búsqueda populares' : algoliaLanguage === 'en' ? 'Popular search terms' : algoliaLanguage === 'fr' ? 'Termes de recherche populaires' : 'Termos de pesquisa populares'}</li>
+                    </ul>
+                    <p className="implementation-note">{algoliaLanguage === 'es' ? 'Sin embargo, en este ejemplo se utilizó el' : algoliaLanguage === 'en' ? 'However, in this example, the' : algoliaLanguage === 'fr' ? 'Cependant, dans cet exemple, le' : 'No entanto, neste exemplo, o'} <strong>Search Client</strong> {algoliaLanguage === 'es' ? 'directamente para demostrar la implementación manual de multi-índice.' : algoliaLanguage === 'en' ? 'was used directly to demonstrate manual multi-index implementation.' : algoliaLanguage === 'fr' ? 'a été utilisé directement pour démontrer l\'implémentation manuelle multi-index.' : 'foi usado diretamente para demonstrar a implementação manual multi-índice.'}</p>
+                  </div>
                 </div>
 
                 <ul>
@@ -889,22 +973,32 @@ const saveRecentSearch = (query) => {
                 <div className="event-details">
                   <div className="event-item">
                     <h5>{algoliaTranslations[algoliaLanguage].productViewed}</h5>
-                    <p><strong>Evento:</strong> viewedObjectIDs</p>
-                    <p><strong>Cuándo:</strong> {algoliaTranslations[algoliaLanguage].whenViewed}</p>
+                    <p><strong>{algoliaTranslations[algoliaLanguage].event}</strong> viewedObjectIDs</p>
+                    <p><strong>{algoliaTranslations[algoliaLanguage].when}</strong> {algoliaTranslations[algoliaLanguage].whenViewed}</p>
                     <p><code>aa('viewedObjectIDs', {'{'} eventName: 'Product Viewed', objectIDs: [...] {'}'})</code></p>
                   </div>
                   <div className="event-item">
                     <h5>{algoliaTranslations[algoliaLanguage].productClicked}</h5>
-                    <p><strong>Evento:</strong> clickedObjectIDs</p>
-                    <p><strong>Cuándo:</strong> {algoliaTranslations[algoliaLanguage].whenClicked}</p>
-                    <p><code>aa('clickedObjectIDs', {'{'} eventName: 'Product Clicked', objectIDs: [...] {'}'})</code></p>
+                    <p><strong>{algoliaTranslations[algoliaLanguage].event}</strong> clickedObjectIDsAfterSearch</p>
+                    <p><strong>{algoliaTranslations[algoliaLanguage].when}</strong> {algoliaTranslations[algoliaLanguage].whenClicked}</p>
+                    <div className="code-block">
+                      <h5>{algoliaTranslations[algoliaLanguage].eventStructure}</h5>
+                      <code>{`// ${algoliaTranslations[algoliaLanguage].officialAPI}
+aa('clickedObjectIDsAfterSearch', {
+  "events": [{
+    "eventName": "Products Clicked",
+    "eventType": "click", 
+    "objectIDs": ["product-123"],
+    "positions": [1],
+    "queryID": "7dfe2ada7bca48bdd0629649df0bee07"
+  }]
+});`}</code>
+                    </div>
+                    <div className="warning-box">
+                      <p><strong>⚠️ {algoliaTranslations[algoliaLanguage].important}</strong> {algoliaTranslations[algoliaLanguage].queryIDRequired}</p>
+                    </div>
                   </div>
-                  <div className="event-item">
-                    <h5>{algoliaTranslations[algoliaLanguage].cartConversion}</h5>
-                    <p><strong>Evento:</strong> purchasedObjectIDsAfterSearch</p>
-                    <p><strong>Cuándo:</strong> {algoliaTranslations[algoliaLanguage].whenAddedToCart}</p>
-                    <p><code>aa('purchasedObjectIDsAfterSearch', {'{'} eventName: 'Product Added to Cart', objectIDs: [...] {'}'})</code></p>
-                  </div>
+
                 </div>
                 <a href="https://www.algolia.com/doc/guides/sending-events/getting-started/" 
                    target="_blank" rel="noopener noreferrer" className="algolia-link">

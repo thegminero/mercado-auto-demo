@@ -869,6 +869,78 @@ THEN boost products where marca = "Bimbo"`}</code>
                   }</p>
                 </div>
               </div>
+
+              <div className="feature-subsection">
+                <h5><i className="fas fa-info-circle"></i> {algoliaLang === 'es' ? 'Alternativa: Atributo categoryPageID' : algoliaLang === 'en' ? 'Alternative: categoryPageID Attribute' : algoliaLang === 'fr' ? 'Alternative: Attribut categoryPageID' : 'Alternativa: Atributo categoryPageID'}</h5>
+                
+                <div className="alternative-approach">
+                  <p>{algoliaLang === 'es' ? 
+                    'Muchas implementaciones de Algolia utilizan el atributo `categoryPageID` en lugar de `raw_category_hierarchy`. Si tu índice contuviera los datos bajo este atributo:' : 
+                    algoliaLang === 'en' ? 
+                    'Many Algolia implementations use the `categoryPageID` attribute instead of `raw_category_hierarchy`. If your index contained data under this attribute:' : 
+                    algoliaLang === 'fr' ? 
+                    'De nombreuses implémentations Algolia utilisent l\'attribut `categoryPageID` au lieu de `raw_category_hierarchy`. Si votre index contenait des données sous cet attribut:' : 
+                    'Muitas implementações do Algolia usam o atributo `categoryPageID` em vez de `raw_category_hierarchy`. Se seu índice contivesse dados sob este atributo:'
+                  }</p>
+                  
+                  <div className="code-block">
+                    <h6>{algoliaLang === 'es' ? 'Estructura alternativa del índice:' : algoliaLang === 'en' ? 'Alternative index structure:' : algoliaLang === 'fr' ? 'Structure d\'index alternative:' : 'Estrutura de índice alternativa:'}</h6>
+                    <code>{`// ${algoliaLang === 'es' ? 'Producto con categoryPageID' : algoliaLang === 'en' ? 'Product with categoryPageID' : algoliaLang === 'fr' ? 'Produit avec categoryPageID' : 'Produto com categoryPageID'}
+{
+  "objectID": "producto-123",
+  "ecomDescription": "Pan Integral",
+  "categoryPageID": "abarrotes-horneado-y-complementos",
+  "categoria_nivel_1": "Abarrotes",
+  "categoria_nivel_2": "Horneado Y Complementos",
+  "categoria_nivel_3": "Panes"
+}`}</code>
+                  </div>
+                  
+                  <h6><i className="fas fa-code"></i> {algoliaLang === 'es' ? 'Cambios requeridos en el código:' : algoliaLang === 'en' ? 'Required code changes:' : algoliaLang === 'fr' ? 'Modifications de code requises:' : 'Mudanças de código necessárias:'}</h6>
+                  
+                  <div className="code-comparison">
+                    <div className="current-code">
+                      <h6><i className="fas fa-code"></i> {algoliaLang === 'es' ? 'Actual (raw_category_hierarchy):' : algoliaLang === 'en' ? 'Current (raw_category_hierarchy):' : algoliaLang === 'fr' ? 'Actuel (raw_category_hierarchy):' : 'Atual (raw_category_hierarchy):'}</h6>
+                      <div className="code-block">
+                        <code>{`// Filtro actual
+const filter = \`raw_category_hierarchy:"\${titleCasePath.join(' > ')}"\`;
+// ${algoliaLang === 'es' ? 'Resultado' : algoliaLang === 'en' ? 'Result' : algoliaLang === 'fr' ? 'Résultat' : 'Resultado'}: 'raw_category_hierarchy:"Abarrotes > Horneado Y Complementos"'`}</code>
+                      </div>
+                    </div>
+                    
+                    <div className="alternative-code">
+                      <h6><i className="fas fa-exchange-alt"></i> {algoliaLang === 'es' ? 'Alternativo (categoryPageID):' : algoliaLang === 'en' ? 'Alternative (categoryPageID):' : algoliaLang === 'fr' ? 'Alternatif (categoryPageID):' : 'Alternativo (categoryPageID):'}</h6>
+                      <div className="code-block">
+                        <code>{`// Filtro con categoryPageID
+const categorySlug = path.map(cat => cat.toLowerCase().replace(/\\s+/g, '-')).join('-');
+const filter = \`categoryPageID:"\${categorySlug}"\`;
+// ${algoliaLang === 'es' ? 'Resultado' : algoliaLang === 'en' ? 'Result' : algoliaLang === 'fr' ? 'Résultat' : 'Resultado'}: 'categoryPageID:"abarrotes-horneado-y-complementos"'`}</code>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <h6><i className="fas fa-cogs"></i> {algoliaLang === 'es' ? 'Merchandising Studio con categoryPageID:' : algoliaLang === 'en' ? 'Merchandising Studio with categoryPageID:' : algoliaLang === 'fr' ? 'Merchandising Studio avec categoryPageID:' : 'Merchandising Studio com categoryPageID:'}</h6>
+                  
+                  <div className="code-block">
+                    <code>{`// ${algoliaLang === 'es' ? 'Regla más simple en Merchandising Studio' : algoliaLang === 'en' ? 'Simpler rule in Merchandising Studio' : algoliaLang === 'fr' ? 'Règle plus simple dans Merchandising Studio' : 'Regra mais simples no Merchandising Studio'}
+IF categoryPageID = "abarrotes-horneado-y-complementos"
+THEN boost products where marca = "Bimbo"
+
+// ${algoliaLang === 'es' ? 'O usar wildcards para categorías padre' : algoliaLang === 'en' ? 'Or use wildcards for parent categories' : algoliaLang === 'fr' ? 'Ou utiliser des wildcards pour les catégories parentes' : 'Ou usar wildcards para categorias pai'}
+IF categoryPageID STARTS_WITH "abarrotes"
+THEN boost products where isNewProduct = true`}</code>
+                  </div>
+                  
+                  <div className="warning-box">
+                    <p><strong>⚠️ {algoliaLang === 'es' ? 'Importante:' : algoliaLang === 'en' ? 'Important:' : algoliaLang === 'fr' ? 'Important:' : 'Importante:'}</strong></p>
+                    <ul>
+                      <li><strong>{algoliaLang === 'es' ? 'Consistencia de datos:' : algoliaLang === 'en' ? 'Data consistency:' : algoliaLang === 'fr' ? 'Cohérence des données:' : 'Consistência dos dados:'}</strong> {algoliaLang === 'es' ? 'El atributo elegido debe usarse consistentemente en toda la aplicación' : algoliaLang === 'en' ? 'The chosen attribute must be used consistently throughout the application' : algoliaLang === 'fr' ? 'L\'attribut choisi doit être utilisé de manière cohérente dans toute l\'application' : 'O atributo escolhido deve ser usado consistentemente em toda a aplicação'}</li>
+                      <li><strong>{algoliaLang === 'es' ? 'Merchandising Studio:' : algoliaLang === 'en' ? 'Merchandising Studio:' : algoliaLang === 'fr' ? 'Merchandising Studio:' : 'Merchandising Studio:'}</strong> {algoliaLang === 'es' ? 'Todas las reglas deben configurarse con el mismo atributo' : algoliaLang === 'en' ? 'All rules must be configured with the same attribute' : algoliaLang === 'fr' ? 'Toutes les règles doivent être configurées avec le même attribut' : 'Todas as regras devem ser configuradas com o mesmo atributo'}</li>
+                      <li><strong>{algoliaLang === 'es' ? 'Estructura del índice:' : algoliaLang === 'en' ? 'Index structure:' : algoliaLang === 'fr' ? 'Structure de l\'index:' : 'Estrutura do índice:'}</strong> {algoliaLang === 'es' ? 'Los datos deben indexarse con el formato correcto para el atributo elegido' : algoliaLang === 'en' ? 'Data must be indexed with the correct format for the chosen attribute' : algoliaLang === 'fr' ? 'Les données doivent être indexées avec le format correct pour l\'attribut choisi' : 'Os dados devem ser indexados com o formato correto para o atributo escolhido'}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="algolia-section">

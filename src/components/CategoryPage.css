@@ -1230,4 +1230,107 @@
     padding: 10px 16px;
     font-size: 0.9rem;
   }
+}
+
+/* Alternative Approach Section Styles */
+.alternative-approach {
+  background: #fafbfc;
+  border: 2px solid #e1e8ed;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.alternative-approach p {
+  margin: 0 0 1rem 0;
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+.alternative-approach h6 {
+  margin: 1.5rem 0 0.75rem 0;
+  color: #2d3748;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.alternative-approach h6:first-of-type {
+  margin-top: 1rem;
+}
+
+.alternative-approach h6 i {
+  color: #4299e1;
+  font-size: 0.9rem;
+}
+
+.code-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.current-code,
+.alternative-code {
+  background: white;
+  border: 2px solid;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.current-code {
+  border-color: #cbd5e0;
+}
+
+.alternative-code {
+  border-color: #9f7aea;
+  background: #faf5ff;
+}
+
+.current-code h6,
+.alternative-code h6 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.current-code h6 {
+  color: #4a5568;
+}
+
+.alternative-code h6 {
+  color: #7c3aed;
+}
+
+.current-code h6 i,
+.alternative-code h6 i {
+  font-size: 0.8rem;
+}
+
+.current-code .code-block {
+  margin: 0;
+}
+
+.alternative-code .code-block {
+  margin: 0;
+  background: white;
+}
+
+/* Mobile responsiveness for alternative approach */
+@media (max-width: 768px) {
+  .alternative-approach {
+    padding: 1.25rem;
+  }
+  
+  .code-comparison {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .alternative-approach h6 {
+    font-size: 0.9rem;
+  }
 } 
