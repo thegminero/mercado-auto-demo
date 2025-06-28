@@ -8,35 +8,51 @@ const CartModal: React.FC = () => {
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
 
   const handleCheckout = () => {
-    // Send purchase events for each item with attribution data
-    state.items.forEach((item) => {
-      if (item.queryID) {
-        try {
-          insights('purchasedObjectIDsAfterSearch', {
-            eventName: 'Purchase',
-            index: 'auto_productos',
-            objectIDs: [item.objectID],
-            userToken: 'anonymous',
-          });
-          
-          console.log('Purchase event sent:', {
-            eventName: 'Purchase',
+    // Filter items that have queryID (came from search/autocomplete)
+    const searchOriginatedItems = state.items.filter(item => item.queryID);
+    
+    if (searchOriginatedItems.length > 0) {
+      try {
+        // Send complete purchase event with all required parameters
+        insights('purchasedObjectIDsAfterSearch', {
+          userToken: 'anonymous-user-1',
+          eventName: 'Products Purchased',
+          authenticatedUserToken: 'user-1',
+          index: 'auto_productos',
+          objectIDs: searchOriginatedItems.map(item => item.objectID),
+          objectData: searchOriginatedItems.map(item => ({
+            price: item.price,
+            discount: item.discount || 0,
+            quantity: item.quantity,
+            queryID: item.queryID
+          })),
+          value: searchOriginatedItems.reduce((total, item) => total + (item.price * item.quantity), 0),
+          currency: 'USD'
+        });
+        
+        console.log('Complete purchase event sent:', {
+          totalItems: searchOriginatedItems.length,
+          totalValue: searchOriginatedItems.reduce((total, item) => total + (item.price * item.quantity), 0),
+          objectIDs: searchOriginatedItems.map(item => item.objectID),
+          searchOriginatedItems: searchOriginatedItems.map(item => ({
             objectID: item.objectID,
+            name: item.name,
             queryID: item.queryID,
             searchQuery: item.searchQuery,
             addedFrom: item.addedFrom,
             quantity: item.quantity,
-            totalValue: item.price * item.quantity
-          });
-        } catch (error) {
-          console.warn('Failed to send purchase event:', error);
-        }
+            price: item.price,
+            subtotal: item.price * item.quantity
+          }))
+        });
+      } catch (error) {
+        console.error('Failed to send purchase event:', error);
       }
-    });
+    }
     
-    // TODO: Implement checkout functionality
+    // TODO: Implement actual checkout functionality
     console.log('Proceeding to checkout with items:', state.items);
-    alert('Checkout functionality will be implemented here');
+    alert(`Purchase completed!\n\nTotal Items: ${getTotalItems()}\nTotal Value: $${getTotalPrice().toFixed(2)}\nSearch-originated items: ${searchOriginatedItems.length}`);
   };
 
   const handleQuantityChange = (objectID: string, newQuantity: number) => {

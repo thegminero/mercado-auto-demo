@@ -29,6 +29,9 @@ insights('init', {
 
 // Main AppContent component
 const AppContent: React.FC = () => {
+  const location = useLocation();
+  const isCategoryPage = location.pathname.startsWith('/category') || location.pathname.startsWith('/categorias');
+  
   return (
     <>
       <Navbar />
@@ -38,6 +41,8 @@ const AppContent: React.FC = () => {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/product/:productId" element={<ProductDetailPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/all-categories" element={<AllCategoriesPage />} />
+        <Route path="/categorias" element={<AllCategoriesPage />} />
         {/* Category routes - support up to 3 levels */}
         <Route path="/category/:category1" element={<CategoryPage />} />
         <Route path="/category/:category1/:category2" element={<CategoryPage />} />
@@ -46,7 +51,6 @@ const AppContent: React.FC = () => {
         <Route path="/categorias/:category1" element={<CategoryPage />} />
         <Route path="/categorias/:category1/:category2" element={<CategoryPage />} />
         <Route path="/categorias/:category1/:category2/:category3" element={<CategoryPage />} />
-        <Route path="/all-categories" element={<AllCategoriesPage />} />
       </Routes>
     </>
   );

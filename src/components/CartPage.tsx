@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCart, CartItem } from '../contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
+import insights from 'search-insights';
 import './CartPage.css';
 
 type AlgoliaLanguage = 'es' | 'en' | 'fr' | 'pt';
@@ -188,8 +189,50 @@ const CartPage: React.FC = () => {
   const [algoliaLang, setAlgoliaLang] = useState<AlgoliaLanguage>('es');
 
   const handleCheckout = () => {
-    // TODO: Implement checkout functionality
-    alert('Funcionalidad de checkout en desarrollo');
+    // Filter items that have queryID (came from search/autocomplete)
+    const searchOriginatedItems = cart.filter(item => item.queryID);
+    
+    if (searchOriginatedItems.length > 0) {
+      try {
+        // Send complete purchase event with all required parameters
+        insights('purchasedObjectIDsAfterSearch', {
+          userToken: 'anonymous-user-1',
+          eventName: 'Products Purchased',
+          authenticatedUserToken: 'user-1',
+          index: 'auto_productos',
+          objectIDs: searchOriginatedItems.map(item => item.objectID),
+          objectData: searchOriginatedItems.map(item => ({
+            price: item.price,
+            discount: item.discount || 0,
+            quantity: item.quantity,
+            queryID: item.queryID
+          })),
+          value: searchOriginatedItems.reduce((total, item) => total + (item.price * item.quantity), 0),
+          currency: 'USD'
+        });
+        
+        console.log('Complete purchase event sent from CartPage:', {
+          totalItems: searchOriginatedItems.length,
+          totalValue: searchOriginatedItems.reduce((total, item) => total + (item.price * item.quantity), 0),
+          objectIDs: searchOriginatedItems.map(item => item.objectID),
+          searchOriginatedItems: searchOriginatedItems.map(item => ({
+            objectID: item.objectID,
+            name: item.name,
+            queryID: item.queryID,
+            searchQuery: item.searchQuery,
+            addedFrom: item.addedFrom,
+            quantity: item.quantity,
+            price: item.price,
+            subtotal: item.price * item.quantity
+          }))
+        });
+      } catch (error) {
+        console.error('Failed to send purchase event from CartPage:', error);
+      }
+    }
+    
+    // TODO: Implement actual checkout functionality
+    alert(`Purchase completed!\n\nTotal Items: ${getTotalItems()}\nTotal Value: $${getTotalPrice().toFixed(2)}\nSearch-originated items: ${searchOriginatedItems.length}`);
   };
 
   const handleContinueShopping = () => {

@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+// Removed InstantSearch hooks - using direct search client instead
 import insights from 'search-insights';
 import algoliasearch from 'algoliasearch/lite';
 import { createProductSlug } from '../utils/productUtils';
@@ -14,10 +15,143 @@ const searchClient = algoliasearch(
 
 const productsIndex = searchClient.initIndex('auto_productos');
 
-// Simple slugify function
+// Tree-style Category Explorer Component
+const HierarchicalCategoryRefinement: React.FC<{ 
+  currentPath: string[]; 
+}> = ({ currentPath }) => {
+  const navigate = useNavigate();
+
+  // Build the navigation state
+  const getNavigationState = () => {
+    let currentCategories = categories;
+    let breadcrumb: any[] = [];
+
+    // Navigate through the path to find current level
+    for (let i = 0; i < currentPath.length; i++) {
+      const segment = currentPath[i];
+      const category = currentCategories.find(cat => 
+        cat.slug === segment || slugify(cat.name.toLowerCase()) === segment
+      );
+      
+      if (category) {
+        breadcrumb.push(category);
+        if (category.subcategories && category.subcategories.length > 0) {
+          currentCategories = category.subcategories;
+        } else {
+          // If no subcategories, we're at a leaf node - show empty
+          currentCategories = [];
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+
+    return {
+      currentCategories,
+      breadcrumb,
+      isAtRoot: currentPath.length === 0
+    };
+  };
+
+  const handleCategoryClick = (category: any) => {
+    // Always allow navigation to any category (whether it has subcategories or not)
+    const newPath = [...currentPath, category.slug];
+    const newUrl = `/categorias/${newPath.join('/')}`;
+    navigate(newUrl);
+  };
+
+  const handleGoBack = () => {
+    if (currentPath.length > 0) {
+      const newPath = currentPath.slice(0, -1);
+      if (newPath.length === 0) {
+        navigate('/categorias');
+      } else {
+        const newUrl = `/categorias/${newPath.join('/')}`;
+        navigate(newUrl);
+      }
+    }
+  };
+
+  const handleBreadcrumbClick = (index: number) => {
+    if (index === -1) {
+      navigate('/categorias');
+    } else {
+      const newPath = currentPath.slice(0, index + 1);
+      const newUrl = `/categorias/${newPath.join('/')}`;
+      navigate(newUrl);
+    }
+  };
+
+  const { currentCategories, breadcrumb, isAtRoot } = getNavigationState();
+
+  return (
+    <div className="category-explorer">
+      {/* Breadcrumb navigation */}
+      <div className="breadcrumb-nav">
+        <button 
+          className={`breadcrumb-btn ${isAtRoot ? 'active' : ''}`}
+          onClick={() => handleBreadcrumbClick(-1)}
+        >
+          <i className="fas fa-home"></i>
+          Categorías
+        </button>
+        
+        {breadcrumb.map((item, index) => (
+          <React.Fragment key={index}>
+            <i className="fas fa-chevron-right breadcrumb-separator"></i>
+            <button 
+              className={`breadcrumb-btn ${index === breadcrumb.length - 1 ? 'active' : ''}`}
+              onClick={() => handleBreadcrumbClick(index)}
+            >
+              {item.name}
+            </button>
+          </React.Fragment>
+        ))}
+      </div>
+
+      {/* Category tree list */}
+      <div className="category-tree">
+        {!isAtRoot && (
+          <button className="tree-item back-item" onClick={handleGoBack}>
+            <i className="fas fa-arrow-left tree-icon"></i>
+            <span className="tree-label">Volver</span>
+          </button>
+        )}
+        
+        {currentCategories.map((category: any) => {
+          const hasChildren = category.subcategories && category.subcategories.length > 0;
+          
+          return (
+            <button 
+              key={category.slug}
+              className={`tree-item ${hasChildren ? 'expandable' : 'leaf'}`}
+              onClick={() => handleCategoryClick(category)}
+            >
+              <i className={`tree-icon ${hasChildren ? 'fas fa-chevron-right' : 'fas fa-circle'}`}></i>
+              <span className="tree-label">{category.name}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Empty state */}
+      {currentCategories.length === 0 && (
+        <div className="empty-message">
+          <i className="fas fa-folder-open"></i>
+          <span>Esta categoría no tiene subcategorías</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Simple slugify function with accent handling
 function slugify(str: string): string {
   return str
     .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove accents
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)+/g, '');
 }
@@ -104,6 +238,8 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ categoryPath }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams<{ category1?: string; category2?: string; category3?: string }>();
+
+  // Removed useInstantSearch and all custom API calls to prevent duplicate queries
 
   // Parse category path from URL parameters
   const getCategoryPath = (): string[] => {
@@ -346,14 +482,155 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ categoryPath }) => {
     );
   });
 
-  // Custom Hits component that fetches filtered results directly
+  // Direct search client approach - bypasses InstantSearch for category filtering
   const CustomHits = () => {
     const [filteredHits, setFilteredHits] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [totalHits, setTotalHits] = useState(0);
-    const path = getCategoryPath();
-    const searchExecutedRef = useRef(false);
-    const searchInProgressRef = useRef(false);
+    
+    // Memoize the path to prevent infinite re-renders
+    const path = useMemo(() => getCategoryPath(), [params.category1, params.category2, params.category3]);
+    
+    useEffect(() => {
+      if (path.length === 0) {
+        setIsLoading(false);
+        return;
+      }
+      
+      setIsLoading(true);
+      
+      // Find the matching category in our generated tree to get the exact hierarchy
+      const findCategoryByPath = (categories: any[], pathSegments: string[]): any => {
+        if (pathSegments.length === 0) return null;
+        
+        const currentSegment = pathSegments[0];
+        const category = categories.find(cat => 
+          cat.slug === currentSegment || 
+          slugify(cat.name.toLowerCase()) === currentSegment
+        );
+        
+        if (!category) return null;
+        
+        if (pathSegments.length === 1) {
+          return category;
+        } else {
+          return findCategoryByPath(category.subcategories || [], pathSegments.slice(1));
+        }
+      };
+      
+      const matchedCategory = findCategoryByPath(categories, path);
+      
+      if (matchedCategory) {
+        console.log('CustomHits: Found category:', matchedCategory.name);
+        console.log('CustomHits: Using hierarchy:', matchedCategory.hierarchy);
+        
+        const filterValue = `raw_category_hierarchy:${matchedCategory.hierarchy}`;
+        console.log('CustomHits: Setting facetFilter:', filterValue);
+        
+        // Use the search client directly with proper facetFilters
+        searchClient.search([
+          {
+            indexName: 'auto_productos',
+            params: {
+              facetFilters: [filterValue],
+              facets: ['marca'],
+              maxValuesPerFacet: 20,
+              hitsPerPage: 20
+            }
+          }
+        ]).then(({ results }) => {
+          console.log('CustomHits: Direct search results:', results);
+          if (results[0] && 'hits' in results[0]) {
+            setFilteredHits(results[0].hits);
+            setTotalHits(results[0].nbHits);
+            
+            // Send view events for products displayed
+            if (results[0].hits.length > 0) {
+              try {
+                const objectIDs = results[0].hits.map((hit: any) => hit.objectID);
+                console.log('Sending view events for products:', objectIDs);
+                
+                insights('viewedObjectIDs', {
+                  eventName: 'Hits Viewed',
+                  index: 'auto_productos',
+                  objectIDs: objectIDs,
+                  queryID: results[0].queryID,
+                } as any);
+                
+                console.log('View events sent successfully');
+              } catch (error) {
+                console.error('Error sending view events:', error);
+              }
+            }
+          }
+          setIsLoading(false);
+        }).catch(error => {
+          console.error('CustomHits: Search error:', error);
+          setIsLoading(false);
+        });
+      } else {
+        console.warn('CustomHits: No category found for path:', path);
+        setIsLoading(false);
+      }
+    }, [path]);
+    
+    if (isLoading) {
+      return (
+        <div className="category-loading">
+          <div className="loading-spinner"></div>
+          <p>Cargando productos...</p>
+        </div>
+      );
+    }
+    
+    if (filteredHits.length === 0) {
+      return (
+        <div className="no-results">
+          <h3>No hay productos disponibles en esta categoría</h3>
+          <p>La categoría "{path[path.length - 1]?.replace(/-/g, ' ')}" no tiene productos disponibles actualmente.</p>
+          <p>Esto puede deberse a que:</p>
+          <ul>
+            <li>Los productos están temporalmente agotados</li>
+            <li>Esta categoría aún no tiene productos asignados</li>
+            <li>Los productos se encuentran en una categoría diferente</li>
+          </ul>
+          <p>Total hits: {totalHits}</p>
+          <button onClick={() => navigate('/all-categories')} className="btn-primary">
+            Ver todas las categorías
+          </button>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="category-results">
+        <div className="category-header">
+          <div className="search-info">
+            <h2>{path[path.length - 1] || 'Categoría'}</h2>
+            <p>{filteredHits.length.toLocaleString()} productos encontrados</p>
+          </div>
+        </div>
+        
+        <div className="products-grid">
+          {filteredHits.map((hit: any) => (
+            <Hit key={hit.objectID} hit={hit as Product} sendEvent={() => {}} />
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // OLD CustomHits with custom search - REMOVED to prevent duplicate queries
+  const CustomHitsOLD = () => {
+    const [filteredHits, setFilteredHits] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [totalHits, setTotalHits] = useState(0);
+    
+    // Memoize the path to prevent infinite re-renders
+    const path = useMemo(() => getCategoryPath(), [params.category1, params.category2, params.category3]);
+    
+    // Show loading state during search
+    const showLoading = isLoading;
     
     // Custom Stats component
     const CustomStats = () => {
@@ -368,12 +645,12 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ categoryPath }) => {
     };
     
     useEffect(() => {
-      if (path.length === 0 || searchExecutedRef.current || searchInProgressRef.current) {
+      if (path.length === 0) {
         setIsLoading(false);
         return;
       }
       
-      searchInProgressRef.current = true;
+      setIsLoading(true);
       
       // Find the matching category in our generated tree to get the exact hierarchy
       const findCategoryByPath = (categories: any[], pathSegments: string[]): any => {
@@ -474,25 +751,22 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ categoryPath }) => {
             }
           }
           setIsLoading(false);
-          searchExecutedRef.current = true;
-          searchInProgressRef.current = false;
         }).catch(error => {
           console.error('CustomHits: Search error:', error);
           setIsLoading(false);
-          searchExecutedRef.current = true;
-          searchInProgressRef.current = false;
         });
       } else {
         console.warn('CustomHits: No category found for path:', path);
         setIsLoading(false);
-        searchExecutedRef.current = true;
-        searchInProgressRef.current = false;
       }
     }, [path, navigate]);
     
-    if (isLoading) {
+    if (showLoading) {
       return (
         <div className="loading">
+          <div className="loading-spinner">
+            <i className="fas fa-spinner fa-spin"></i>
+          </div>
           <p>Cargando productos...</p>
         </div>
       );
@@ -609,33 +883,17 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ categoryPath }) => {
             </div>
 
             <div className="filter-section">
-              <h5>Categorías Jerárquicas</h5>
-              <div className="hierarchical-filters">
-                <div className="hierarchy-level">
-                  <h6>Nivel 0 (Principal)</h6>
-                  <div className="hierarchy-options">
-                    <p>Categorías principales disponibles</p>
-                  </div>
-                </div>
-                <div className="hierarchy-level">
-                  <h6>Nivel 1 (Subcategoría)</h6>
-                  <div className="hierarchy-options">
-                    <p>Subcategorías disponibles</p>
-                  </div>
-                </div>
-                <div className="hierarchy-level">
-                  <h6>Nivel 2 (Específica)</h6>
-                  <div className="hierarchy-options">
-                    <p>Categorías específicas disponibles</p>
-                  </div>
-                </div>
-              </div>
+              <h5>Categorías</h5>
+              <HierarchicalCategoryRefinement 
+              currentPath={getCategoryPath()} 
+            />
             </div>
 
             <div className="filter-section">
-              <h5>Marcas</h5>
-              <div className="brand-filters">
-                <p>Filtros de marca disponibles</p>
+              <h5>Filtros</h5>
+              <div className="filter-placeholder">
+                <p>Los filtros de marca y otros filtros se implementarán próximamente.</p>
+                <p>Esta sección mostrará filtros dinámicos basados en los productos de la categoría actual.</p>
               </div>
             </div>
 
